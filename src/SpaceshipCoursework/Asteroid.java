@@ -22,6 +22,10 @@ public class Asteroid implements Serializable{
 		return noOfItems;
 	}
 	
+	public int getID() {
+		return ID;
+	}
+	
 	public boolean isHere(int x_coord, int y_coord) {
 		if (x != x_coord || y != y_coord) {
 			return false;
@@ -29,16 +33,16 @@ public class Asteroid implements Serializable{
 		return true;
 	}
 	
-	public void displayAsteroid(ConsoleCanvas c) {
-		c.showIt(x, y, ID);
-	}
+	//public void displayAsteroid(ConsoleCanvas c) {
+	//	c.showIt(x, y, ID);
+	//}
 	
 	public void tryToMove(Galaxy g) {
 		
 	}
 	
 	public void drawAsteroid(MyCanvas mc) {
-		mc.showBall(x, y, size);
+		mc.showCircle(x, y, size);
 	}
 	
 	public String toString() {

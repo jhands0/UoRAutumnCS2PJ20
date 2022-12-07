@@ -1,4 +1,5 @@
 package SpaceshipCoursework;
+
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -149,7 +150,7 @@ public class GalaxyInterface extends Application{
 	    });
 	    
 	    Button btnLoad = new Button("Load");
-	    btnSave.setOnAction(new EventHandler<ActionEvent>() {
+	    btnLoad.setOnAction(new EventHandler<ActionEvent>() {
 	    	@Override
 	    	public void handle(ActionEvent event) {
 	    		String filename = JOptionPane.showInputDialog(null, "Input the name of the file you would like to load the galaxy from: ");
@@ -241,6 +242,7 @@ public class GalaxyInterface extends Application{
 	    timer = new AnimationTimer() {									// set up timer
 	        public void handle(long currentNanoTime) {					// and its action when on
 	        		myGalaxy.moveAllSpaceships();
+	        		myGalaxy.moveAllSeekers();
 		            myGalaxy.drawWorld(mc);										// redraw the world
 		            drawStatus();										// indicate where ball is
 	        }

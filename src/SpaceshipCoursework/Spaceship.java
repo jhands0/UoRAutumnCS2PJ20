@@ -1,4 +1,5 @@
 package SpaceshipCoursework;
+
 import java.io.Serializable;
 
 public class Spaceship extends Asteroid implements Serializable {
@@ -25,9 +26,9 @@ public class Spaceship extends Asteroid implements Serializable {
 			return true;
 		}
 		
-		public void displaySpaceship(ConsoleCanvas c) {
-			c.showIt(x, y, ID);
-		}
+		//public void displaySpaceship(ConsoleCanvas c) {
+		//	c.showIt(x, y, ID);
+		//}
 		
 		public void tryToMove(Galaxy g) {
 			int dx = 0;
@@ -75,6 +76,11 @@ public class Spaceship extends Asteroid implements Serializable {
 			}
 			if (g.canMoveHere(x+dx, y+dy) == false) {
 				Direction new_dir = Direction.getNextDirection(dir);
+				if (x+dx == 0 || x+dx == g.getX() || y+dy == 0 || y+dy == g.getY()) {
+					new_dir = Direction.getNextDirection(new_dir);
+					new_dir = Direction.getNextDirection(new_dir);
+					new_dir = Direction.getNextDirection(new_dir);
+				}
 				dir = new_dir;
 			}
 			else
@@ -89,8 +95,16 @@ public class Spaceship extends Asteroid implements Serializable {
 			y = new_y;
 		}
 		
+		public int getX() {
+			return x;
+		}
+		
+		public int getY() {
+			return y;
+		}
+		
 		public void drawSpaceship(MyCanvas mc) {
-			mc.showBall(x, y, size);
+			mc.showSquare(x, y, size);
 		}
 		
 		public String toString() {

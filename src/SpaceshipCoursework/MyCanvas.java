@@ -17,7 +17,7 @@ public class MyCanvas {
     GraphicsContext gc; 
 
     /**
-     * onstructor sets up relevant Graphics context and size of canvas
+     * constructor sets up relevant Graphics context and size of canvas
      * @param g
      * @param cs
      */
@@ -78,14 +78,14 @@ public class MyCanvas {
 	 * @param rad
 	 * @param col
 	 */
-	public void showBall(double x, double y, double rad, char col) {
-	 	setFillColour(colFromChar(col));									// set the fill colour
-		gc.fillArc(x-rad, y-rad, rad*2, rad*2, 0, 360, ArcType.ROUND);	// fill circle
+	public void showSquare(double x, double y, double rad) {
+		gc.fillRoundRect(x-rad, y-rad, rad*2, rad*2, rad, rad);
+	}
+	
+	public void showCircle(double x, double y, double rad) {
+		gc.fillArc(x-rad, y-rad, rad*2, rad*2, 0, 360, ArcType.ROUND);
 	}
 
-	public void showBall(double x, double y, double rad) {
-		gc.fillArc(x-rad, y-rad, rad*2, rad*2, 0, 360, ArcType.ROUND);	// fill circle
-	}
 
 	/**
 	 * Show Text .. by writing string s at position x,y

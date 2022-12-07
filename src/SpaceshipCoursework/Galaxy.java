@@ -1,9 +1,8 @@
 package SpaceshipCoursework;
-import java.util.random.*;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.ArrayList;
 
 
 import javafx.scene.paint.Color;
@@ -12,6 +11,8 @@ public class Galaxy implements Serializable{
 	
 	private ArrayList<Spaceship> spaceships;
 	private ArrayList<Asteroid> asteroids;
+	private ArrayList<Seeker> seekers;
+	private ArrayList<Object> items;
 	private Random randomGenerator; 
 	private int x;
 	private int y;
@@ -19,6 +20,8 @@ public class Galaxy implements Serializable{
 	Galaxy(int x_size, int y_size) {
 		spaceships = new ArrayList<Spaceship>();
 		asteroids = new ArrayList<Asteroid>();
+		seekers = new ArrayList<Seeker>();
+		items = new ArrayList<Object>();
 		randomGenerator = new Random();
 		x = x_size;
 		y = y_size;
@@ -29,25 +32,40 @@ public class Galaxy implements Serializable{
 		int y_rand = randomGenerator.nextInt(y-1)+1;
 		int size_rand = randomGenerator.nextInt(10)+1;
 		Direction dir_rand = Direction.getRandomDirection();
-		while ((isSpaceshipAt(x_rand, y_rand) == true) || (isAsteroidAt(x_rand, y_rand) == true)) {
+		while ((isSpaceshipAt(x_rand, y_rand) == true) || (isAsteroidAt(x_rand, y_rand) == true) || (isSeekerAt(x_rand, y_rand) == true)) {
 			x_rand = randomGenerator.nextInt(x-1)+1;
 			y_rand = randomGenerator.nextInt(y-1)+1;
 		}
-		int asteroidOrSpaceship = randomGenerator.nextInt(10);
-		if (asteroidOrSpaceship <= 2) {
+		int typeOfShip = randomGenerator.nextInt(10);
+		if (typeOfShip <= 2) {
 			Asteroid obj = new Asteroid(x_rand, y_rand, size_rand);
 			asteroids.add(obj);
+			items.add(obj);
+		}
+		else if ((typeOfShip > 2) && (typeOfShip < 5)) {
+			if(spaceships.isEmpty() != true) {
+				int shipToFollow = randomGenerator.nextInt(spaceships.size());
+				Seeker obj = new Seeker(x_rand, y_rand, dir_rand, size_rand, spaceships.get(shipToFollow));
+				seekers.add(obj);
+				items.add(obj);
+			}
+			else {
+				Spaceship obj = new Spaceship(x_rand, y_rand, dir_rand, size_rand);
+				spaceships.add(obj);
+				items.add(obj);
+			}
 		}
 		else {
 			Spaceship obj = new Spaceship(x_rand, y_rand, dir_rand, size_rand);
 			spaceships.add(obj);
+			items.add(obj);
 		}
 		
 	}
 
 	public boolean isSpaceshipAt(int x_coord, int y_coord) {
 		for (int i = 0; i < spaceships.size(); i++) {
-			if ( (spaceships.get(i)).isHere(x_coord, y_coord) == true) {
+			if (spaceships.get(i).isHere(x_coord, y_coord) == true) {
 				return true;
 			}
 		}
@@ -56,24 +74,33 @@ public class Galaxy implements Serializable{
 	
 	public boolean isAsteroidAt(int x_coord, int y_coord) {
 		for (int i = 0; i < asteroids.size(); i++) {
-			if ( ( asteroids.get(i)).isHere(x_coord, y_coord) == true) {
+			if (asteroids.get(i).isHere(x_coord, y_coord) == true) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	public void showSpaceships(ConsoleCanvas c) {
-		for (int i = 0; i < spaceships.size(); i++) {
-			( spaceships.get(i)).displaySpaceship(c);
+	public boolean isSeekerAt(int x_coord, int y_coord) {
+		for (int i = 0; i < seekers.size(); i++) {
+			if (seekers.get(i).isHere(x_coord, y_coord) == true) {
+				return true;
+			}
 		}
+		return false;
 	}
 	
-	public void showAsteroids(ConsoleCanvas c) {
-		for (int i = 0; i < asteroids.size(); i++) {
-			( asteroids.get(i)).displayAsteroid(c);
-		}
-	}
+	//public void showSpaceships(ConsoleCanvas c) {
+	//	for (int i = 0; i < spaceships.size(); i++) {
+	//		( spaceships.get(i)).displaySpaceship(c);
+	//	}
+	//}
+	
+	//public void showAsteroids(ConsoleCanvas c) {
+	//	for (int i = 0; i < asteroids.size(); i++) {
+	//		( asteroids.get(i)).displayAsteroid(c);
+	//	}
+	//}
 	
 	public void drawWorld(MyCanvas mc) {
 		mc.clearCanvas();
@@ -85,10 +112,16 @@ public class Galaxy implements Serializable{
 			mc.setFillColour(Color.WHITE);
 			spaceships.get(j).drawSpaceship(mc);
 		}
+		for (int k = 0; k < seekers.size(); k++) {
+			mc.setFillColour(Color.GRAY);
+			seekers.get(k).drawSeeker(mc);
+		}
 	}
 	
 	public void updateGalaxy(MyCanvas mc) {
 		moveAllSpaceships();
+		moveAllSeekers();
+		
 	}
 	
 	public int getX() {
@@ -106,22 +139,32 @@ public class Galaxy implements Serializable{
 		if(isSpaceshipAt(new_x, new_y) == true) {
 			return false;
 		}
+		if(isAsteroidAt(new_x, new_y) == true) {
+			return false;
+		}
+		if(isSeekerAt(new_x, new_y) == true) {
+			return false;
+		}
 		return true;
 	}
 	
 	public void moveAllSpaceships() {
 		for (int i = 0; i < spaceships.size(); i++) {
-			( spaceships.get(i)).tryToMove(this);
+			spaceships.get(i).tryToMove(this);
+		}
+	}
+	
+	public void moveAllSeekers() {
+		for (int i = 0; i < seekers.size(); i++) {
+			seekers.get(i).track();
+			seekers.get(i).tryToMove(this);
 		}
 	}
 	
 	public String toString() {
 		String output = "Drone Arena is size " + x + "*" + y + "\n";
-		for (int i = 0; i < spaceships.size(); i++) {
-			output = output + spaceships.get(i).toString() + "\n";
-		}
-		for (int i = 0; i < asteroids.size(); i++) {
-			output = output + asteroids.get(i).toString() + "\n";
+		for(int i = 0; i < items.size(); i++) {
+			output = output + items.get(i).toString() + "\n";
 		}
 		return output;
 	}
