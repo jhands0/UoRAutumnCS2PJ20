@@ -40,7 +40,7 @@ import javafx.stage.Stage;
 public class GalaxyInterface extends Application{
 	private AnimationTimer timer;					//timer for the spaceships moving animation
 	private MyCanvas mc;
-	private VBox rtPane;								// scanner used for input from user
+	private VBox rtPane;								
     private Galaxy myGalaxy;				// galaxy in which spaceships are shown
     /**
     	 * constructor for GalaxyInterface
@@ -52,7 +52,6 @@ public class GalaxyInterface extends Application{
     	 int x = Integer.valueOf(x_input);
     	 int y = Integer.valueOf(y_input);
     	 myGalaxy = new Galaxy(x, y);	// create galaxy of size 20*6
-    	 									// close scanner
     }
     
     //public void doDisplay() {
@@ -73,7 +72,7 @@ public class GalaxyInterface extends Application{
 	}
     
     /**
-	  * set up the mouse event - when mouse pressed, put ball there
+	  * set up the mouse event - when mouse pressed, put a spaceship there
 	  * @param canvas
 	  */
 	void setMouseEvents (Canvas canvas) {
@@ -81,7 +80,7 @@ public class GalaxyInterface extends Application{
 	    	       new EventHandler<MouseEvent>() {
 	    	           @Override
 	    	           public void handle(MouseEvent e) {
-	    	        	   myGalaxy.addSpaceship();
+	    	        	   myGalaxy.addSpaceship();							// add spaceship
 	    	        	   myGalaxy.drawWorld(mc);							// redraw world
 	    	        	   drawStatus();
 	    	           }
@@ -140,21 +139,21 @@ public class GalaxyInterface extends Application{
 	       }
 	    });
 	    
-	    Button btnSave = new Button("Save");
+	    Button btnSave = new Button("Save");					//create button for saving galaxy
 	    btnSave.setOnAction(new EventHandler<ActionEvent>() {
 	    	@Override
 	    	public void handle(ActionEvent event) {
-	    		String filename = JOptionPane.showInputDialog(null, "Input the name of the file you would like to save the galaxy too: ");
-	    		saveGalaxy(filename);
+	    		String filename = JOptionPane.showInputDialog(null, "Input the name of the file you would like to save the galaxy too: "); // user input for filename
+	    		saveGalaxy(filename); //calls saveGalaxy with filename as input param
 	    	}
 	    });
 	    
-	    Button btnLoad = new Button("Load");
+	    Button btnLoad = new Button("Load");					//creates button for loading galaxy
 	    btnLoad.setOnAction(new EventHandler<ActionEvent>() {
 	    	@Override
 	    	public void handle(ActionEvent event) {
-	    		String filename = JOptionPane.showInputDialog(null, "Input the name of the file you would like to load the galaxy from: ");
-	    		loadGalaxy(filename);
+	    		String filename = JOptionPane.showInputDialog(null, "Input the name of the file you would like to load the galaxy from: ");	// user input for filename
+	    		loadGalaxy(filename); //calls loadGalaxy with filename as input param
 	    		Canvas canvas = new Canvas( myGalaxy.getX(), myGalaxy.getY() );
 	    		Group root = new Group();
 	    	    root.getChildren().add( canvas );
@@ -168,7 +167,7 @@ public class GalaxyInterface extends Application{
 	}
 	
 	/**
-	 * show where ball is, in pane on right
+	 * show where each item is, in pane on right
 	 */
 	public void drawStatus() {
 		rtPane.getChildren().clear();	// clear rtpane
