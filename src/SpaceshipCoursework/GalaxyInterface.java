@@ -36,7 +36,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-
+/**
+* @author yh006150
+*  Class to interface the galaxy and all it's items
+*/
 public class GalaxyInterface extends Application{
 	private AnimationTimer timer;					//timer for the spaceships moving animation
 	private MyCanvas mc;
@@ -154,11 +157,10 @@ public class GalaxyInterface extends Application{
 	    	public void handle(ActionEvent event) {
 	    		String filename = JOptionPane.showInputDialog(null, "Input the name of the file you would like to load the galaxy from: ");	// user input for filename
 	    		loadGalaxy(filename); //calls loadGalaxy with filename as input param
-	    		Canvas canvas = new Canvas( myGalaxy.getX(), myGalaxy.getY() );
-	    		Group root = new Group();
-	    	    root.getChildren().add( canvas );
-	    	    mc = new MyCanvas(canvas.getGraphicsContext2D(), myGalaxy.getX(), myGalaxy.getY());
-	    	    myGalaxy.drawWorld(mc);
+	    		mc.clearCanvas();
+	    		mc.resizeCanvas(myGalaxy.getX(), myGalaxy.getY());
+	    		myGalaxy.drawWorld(mc);
+	    		drawStatus();
 	    	}
 	    });
 
@@ -174,13 +176,17 @@ public class GalaxyInterface extends Application{
 		rtPane.getChildren().add(new Label(myGalaxy.toString()));
 	}
     
+	/**
+	 * function to save a galaxy object to a text file.
+	 * @param fileName
+	 */
     public void saveGalaxy(String fileName) {
-    	String filepath = "D:\\source\\SpaceshipCoursework\\saves\\" + fileName + ".txt";
+    	String filepath = "D:\\source\\SpaceshipCoursework\\saves\\" + fileName + ".txt"; //appends the filename to the filepath
     	try {
-    		FileOutputStream fileOut = new FileOutputStream(filepath);
-    		ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
-    		objOut.writeObject(myGalaxy);
-    		JOptionPane.showMessageDialog(null, "Saved galaxy to " + filepath);
+    		FileOutputStream fileOut = new FileOutputStream(filepath); //create fileOutputStream object with filepath as param
+    		ObjectOutputStream objOut = new ObjectOutputStream(fileOut); //create objectOutputStream object with fileOutputStream as param
+    		objOut.writeObject(myGalaxy); //writes the galaxy object to the text file
+    		JOptionPane.showMessageDialog(null, "Saved galaxy to " + filepath); //output message
     		objOut.close();
     	}
     	catch (Exception ex) {
@@ -189,15 +195,19 @@ public class GalaxyInterface extends Application{
     	
     }
     
+    /**
+    * function to load a galaxy object from a text file
+    * @param fileName
+    */
     public Object loadGalaxy(String fileName) {
-    	String filepath = "D:\\source\\SpaceshipCoursework\\saves\\" + fileName + ".txt";
+    	String filepath = "D:\\source\\SpaceshipCoursework\\saves\\" + fileName + ".txt"; //appends fileName to filepath
     	try {
-    		FileInputStream fileIn = new FileInputStream(filepath);
-    		ObjectInputStream objIn = new ObjectInputStream(fileIn);
-    		Object obj = objIn.readObject();
-    		JOptionPane.showMessageDialog(null, "Loaded galaxy from " + filepath);
+    		FileInputStream fileIn = new FileInputStream(filepath); //opens fileInputStream object
+    		ObjectInputStream objIn = new ObjectInputStream(fileIn); //opens objectInputStream object
+    		Object obj = objIn.readObject(); //creates object obj that holds the contents of the text file
+    		JOptionPane.showMessageDialog(null, "Loaded galaxy from " + filepath); //user output
     		objIn.close();
-    		return obj;
+    		return (Galaxy)obj;
     	}
     	catch (Exception ex) {
     		ex.printStackTrace();
@@ -222,10 +232,7 @@ public class GalaxyInterface extends Application{
 	    bp.setLeft(root);												// load canvas to left area
 
 	    mc = new MyCanvas(canvas.getGraphicsContext2D(), myGalaxy.getX(), myGalaxy.getY());
-
-	    GraphicsContext gc = canvas.getGraphicsContext2D();								// context for drawing
-	    gc.setFill(Color.BLUEVIOLET);
-	    gc.fillRect(0, 0, myGalaxy.getX(), myGalaxy.getY());
+	    
 	    
 	    
 	    rtPane = new VBox();											// set vBox on right to list items
@@ -236,7 +243,8 @@ public class GalaxyInterface extends Application{
 	    bp.setBottom(setButtons());										// set bottom pane with buttons
 	    
 	    setMouseEvents(canvas);											// set up mouse events
-	    myGalaxy.drawWorld(mc);													// draw world with ball there
+	    mc.fillBackground();
+	    myGalaxy.drawWorld(mc);													// draw world with items there
 	    
 	    timer = new AnimationTimer() {									// set up timer
 	        public void handle(long currentNanoTime) {					// and its action when on

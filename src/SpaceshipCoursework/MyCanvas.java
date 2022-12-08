@@ -27,8 +27,23 @@ public class MyCanvas {
     	yCanvasSize = ycs;
     }
     
+    /**
+    * function to resize existing canvas by overwriting xCanvasSize and yCanvasSize
+    * @param xcs
+    * @param ycs
+    */
+    public void resizeCanvas(int xcs, int ycs) {
+    	xCanvasSize = xcs;
+    	yCanvasSize = ycs;
+    }
+    
     public void clearCanvas() {
 		gc.clearRect(0,  0,  xCanvasSize,  yCanvasSize);		// clear canvas
+    }
+    
+    public void fillBackground() {
+    	Image space = new Image("D:\\source\\SpaceshipCoursework\\space.jpg");
+    	drawIt(space, 0, 0, 1);
     }
 	/**
      * drawIt ... draws object defined by given image at position and size
