@@ -251,7 +251,7 @@ public class GalaxyInterface extends Application{
 	        		myGalaxy.moveAllSpaceships();
 	        		myGalaxy.moveAllSeekers();
 		            myGalaxy.drawWorld(mc);										// redraw the world
-		            drawStatus();										// indicate where ball is
+		            drawStatus();										// indicate where item is
 	        }
 	    };
 

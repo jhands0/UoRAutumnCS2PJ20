@@ -8,11 +8,11 @@ import javafx.scene.shape.ArcType;
 import javafx.scene.text.TextAlignment;
 
 /**
- * @author shsmchlr
+ * @author yh006150
  *  Class to handle a canvas, used by different GUIs
  */
 public class MyCanvas {
-	int xCanvasSize = 512;				// constants for relevant sizes
+	int xCanvasSize = 512;				
 	int yCanvasSize = 512;
     GraphicsContext gc; 
 
@@ -87,7 +87,7 @@ public class MyCanvas {
 		gc.setFill(c);
 	}
 	/**
-	 * show the ball at position x,y , radius r in colour defined by col
+	 * show the item at position x,y , radius r
 	 * @param x
 	 * @param y
 	 * @param rad
@@ -112,7 +112,7 @@ public class MyCanvas {
 		gc.setTextAlign(TextAlignment.CENTER);							// set horizontal alignment
 		gc.setTextBaseline(VPos.CENTER);								// vertical
 		gc.setFill(Color.WHITE);										// colour in white
-		gc.fillText(s, x, y);						// print score as text
+		gc.fillText(s, x, y);
 	}
 
 	/**
